@@ -1,0 +1,3 @@
+# droolscar
+
+zsh theme
