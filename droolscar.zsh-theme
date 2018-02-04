@@ -110,7 +110,7 @@ prompt_git_remote() {
   local remote_status
   local remote=${1:-"origin"}
 
-  fg=white
+  fg=black
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     current_branch=${$(git rev-parse --abbrev-ref HEAD)}
