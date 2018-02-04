@@ -71,7 +71,7 @@ prompt_git_name() {
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     name=`git config --get user.name`
 
-    prompt_segment yellow white "✏ $name"
+    prompt_segment yellow black "✏ $name"
   fi
 }
 
@@ -85,11 +85,11 @@ prompt_git_current_branch() {
     zstyle ':vcs_info:*' check-for-changes true
     zstyle ':vcs_info:*' stagedstr '✚ '
     zstyle ':vcs_info:*' unstagedstr '● '
-    zstyle ':vcs_info:*' formats "%{ %F{white}%}%b %{%F{black}%}%u%c"
+    zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
     zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
     vcs_info
 
-    prompt_segment green white $vcs_info_msg_0_
+    prompt_segment green black $vcs_info_msg_0_
   fi
 }
 
