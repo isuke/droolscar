@@ -93,21 +93,32 @@ prompt_git_current_branch() {
   fi
 }
 
-prompt_git_remote_branch() {
+prompt_git_remotes() {
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+    eval "remotes=(`git remote | sed 's/\n/ /'`)"
+    for remote in $remotes; do
+      prompt_git_remote $remote
+    done
+  fi
+}
+
+prompt_git_remote() {
   local fg
   local current_branch
   local remote
   local ahead behind
   local remote_status
+  local remote=${1:-"origin"}
 
   fg=white
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     current_branch=${$(git rev-parse --abbrev-ref HEAD)}
-    remote=${$(git rev-parse --verify remotes\/origin\/${current_branch} --symbolic-full-name 2> /dev/null)}
-    if [[ -n ${remote} ]] ; then
-      ahead=$(git rev-list ${remote}..HEAD 2> /dev/null | wc -l | tr -d ' ')
-      behind=$(git rev-list HEAD..${remote} 2> /dev/null | wc -l | tr -d ' ')
+    remote_path=${$(git rev-parse --verify remotes\/${remote}\/${current_branch} --symbolic-full-name 2> /dev/null)}
+
+    if [[ -n ${remote_path} ]] ; then
+      ahead=$(git rev-list ${remote_path}..HEAD 2> /dev/null | wc -l | tr -d ' ')
+      behind=$(git rev-list HEAD..${remote_path} 2> /dev/null | wc -l | tr -d ' ')
 
       if [[ $ahead -eq 0 && $behind -eq 0 ]] ; then
         remote_status="○ "
@@ -126,7 +137,7 @@ prompt_git_remote_branch() {
       remote_status="--"
     fi
 
-    prompt_segment cyan $fg "⏏ remote $remote_status"
+    prompt_segment cyan $fg "⏏ $remote $remote_status"
   fi
 }
 
@@ -158,7 +169,7 @@ build_prompt() {
   prompt_git_name
   prompt_git_current_branch
   prompt_git_stash
-  prompt_git_remote_branch
+  prompt_git_remotes
   prompt_end
 
   echo
