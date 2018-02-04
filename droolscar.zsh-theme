@@ -123,17 +123,18 @@ prompt_git_remote_branch() {
 }
 
 prompt_git_stash() {
-  local bg
+  local fg
+  local stash_size
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    local stash_size=$(git stash list | wc -l | tr -d ' ')
+    stash_size=$(git stash list | wc -l | tr -d ' ')
     if [[ stash_size -eq 0 ]]; then
-      local bg=white
+      fg=black
     else
-      local bg=red
+      fg=red
     fi
 
-    prompt_segment $bg black "❒ stash +$stash_size"
+    prompt_segment white $fg "❒ stash +$stash_size"
   fi
 }
 
