@@ -41,7 +41,7 @@ prompt_status_and_time() {
     fg=white
   fi
 
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{red}%}&"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{red}%}✱ "
 
   CURRENT_BG=$bg
 
@@ -71,7 +71,7 @@ prompt_git_name() {
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     name=`git config --get user.name`
 
-    prompt_segment yellow white $name
+    prompt_segment yellow white "✏ $name"
   fi
 }
 
@@ -85,8 +85,8 @@ prompt_git_current_branch() {
     zstyle ':vcs_info:*' check-for-changes true
     zstyle ':vcs_info:*' stagedstr '✚ '
     zstyle ':vcs_info:*' unstagedstr '● '
-    zstyle ':vcs_info:*' formats "%{%F{white}%}%b %{%F{black}%}%u%c"
-    zstyle ':vcs_info:*' actionformats "%{%F{red}%}%b %{%F{black}%}%u%c"
+    zstyle ':vcs_info:*' formats "%{ %F{white}%}%b %{%F{black}%}%u%c"
+    zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
     vcs_info
 
     prompt_segment green white $vcs_info_msg_0_
@@ -118,7 +118,7 @@ prompt_git_remote_branch() {
       num="--"
     fi
 
-    prompt_segment cyan white "remote $num"
+    prompt_segment cyan white "⏏ remote $num"
   fi
 }
 
@@ -133,7 +133,7 @@ prompt_git_stash() {
       local bg=red
     fi
 
-    prompt_segment $bg black "stash +$stash_size"
+    prompt_segment $bg black "❒ stash +$stash_size"
   fi
 }
 
