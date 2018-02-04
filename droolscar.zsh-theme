@@ -94,9 +94,13 @@ prompt_git_current_branch() {
 }
 
 prompt_git_remote_branch() {
+  local fg
   local current_branch
   local remote
-  local ahead behind num
+  local ahead behind
+  local remote_status
+
+  fg=white
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     current_branch=${$(git rev-parse --abbrev-ref HEAD)}
@@ -106,19 +110,23 @@ prompt_git_remote_branch() {
       behind=$(git rev-list HEAD..${remote} 2> /dev/null | wc -l | tr -d ' ')
 
       if [[ $ahead -eq 0 && $behind -eq 0 ]] ; then
-        num="○ "
+        remote_status="○ "
       else
         if [[ $ahead -gt 0 ]] ; then
-          num="%{%F{black}%}+${ahead}"
-        else
-          num="%{%F{red}%}-${behind}"
+          fg=yellow
         fi
+
+        if [[ $behind -gt 0 ]] ; then
+          fg=red
+        fi
+
+        remote_status="+${ahead} -${behind}"
       fi
     else
-      num="--"
+      remote_status="--"
     fi
 
-    prompt_segment cyan white "⏏ remote $num"
+    prompt_segment cyan $fg "⏏ remote $remote_status"
   fi
 }
 
