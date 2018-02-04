@@ -1,4 +1,4 @@
-DROOLSCAR_DATE_FORMAT=${1:-"+%m/%d %H:%I:%S"}
+DROOLSCAR_DATE_FORMAT=${DROOLSCAR_DATE_FORMAT:-"+%m/%d %H:%M:%S"}
 DROOLSCAR_SEGMENT_SEPARATOR=''
 
 prompt_segment() {
