@@ -65,6 +65,16 @@ prompt_dir() {
   prompt_segment blue white '%~'
 }
 
+prompt_git_name() {
+  local name
+
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+    name=`git config --get user.name`
+
+    prompt_segment yellow white $name
+  fi
+}
+
 prompt_git_current_branch() {
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     setopt promptsubst
@@ -136,6 +146,7 @@ build_prompt() {
   RETVAL=$?
   prompt_name
   prompt_dir
+  prompt_git_name
   prompt_git_current_branch
   prompt_git_stash
   prompt_git_remote_branch
