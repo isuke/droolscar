@@ -106,7 +106,7 @@ prompt_git_remote_branch() {
       behind=$(git rev-list HEAD..${remote} 2> /dev/null | wc -l | tr -d ' ')
 
       if [[ $ahead -eq 0 && $behind -eq 0 ]] ; then
-        num=""
+        num="○ "
       else
         if [[ $ahead -gt 0 ]] ; then
           num="%{%F{black}%}+${ahead}"
