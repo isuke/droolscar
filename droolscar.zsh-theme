@@ -66,13 +66,27 @@ prompt_dir() {
 }
 
 prompt_git_name() {
-  local name
-
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    name=`git config --get user.name`
-
-    prompt_segment yellow black "✏ $name"
+    if $(git config --get duet.env.git-author-name >/dev/null 2>&1); then
+      prompt_git_duet_name
+    else
+      prompt_git_normal_name
+    fi
   fi
+}
+
+prompt_git_normal_name() {
+  local name=`git config --get user.name`
+
+  prompt_segment yellow black "✏ $name"
+}
+
+prompt_git_duet_name() {
+  local author_name=`git config --get duet.env.git-author-name`
+  local committer_name=`git config --get duet.env.git-committer-name`
+
+  [[ $author_name ]] && prompt_segment yellow black "✏ $author_name"
+  [[ $committer_name ]] && prompt_segment yellow black "✏ $committer_name"
 }
 
 prompt_git_current_branch() {
