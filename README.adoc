@@ -5,11 +5,61 @@
 
 = Droolscar
 
-**Droolscar** is zsh theme.
-
 image:https://raw.githubusercontent.com/isuke/droolscar/images/image1.png[]
 
+**Droolscar** is zsh theme.
+
 You need https://github.com/powerline/powerline[Powerline].
+
+== Features
+
+image:https://raw.githubusercontent.com/isuke/droolscar/images/features.png[]
+
+=== user id
+
+Show user id.
+
+=== dir path
+
+Show current directory path.
+
+=== git authors
+
+Show current git author name.
+If you use https://github.com/git-duet/git-duet[git-duet], show all author names.
+
+=== git current branch and status
+
+Show git current branch name.
+
+Show git status as follows.
+
+* `✚` : exist staged file(s).
+* `●` : exist unstaged file(s).
+
+=== git stash num
+
+Show git stash num.
+If exist stash, text color is changed to red.
+
+=== git remote names and status
+
+Show git remote names.
+If exist multiple remote (ex, `master` and `heroku`), show all.
+
+If exist 'not pushed commits', counted numbers show by negative.
+And text color is changed to yellow.
+
+If exist 'not pulled commits', counted numbers show by positive.
+And text color is changed to red.
+
+=== current time and exit status
+
+Show current time.
+
+If prev command's exit code is not 0, background color is changed to red.
+
+If exist background job, show `✱` mark.
 
 == Usage
 
