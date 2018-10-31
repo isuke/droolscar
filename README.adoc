@@ -1,0 +1,26 @@
+:chapter-label:
+:icons: font
+:lang: en
+:source-highlighter: highlightjs
+
+= Droolscar
+
+**Droolscar** is zsh theme.
+
+image:https://raw.githubusercontent.com/isuke/droolscar/images/image1.png[]
+
+You need https://github.com/powerline/powerline[Powerline].
+
+== Usage
+
+=== By https://github.com/zplug/zplug[zplug]
+
+[source, sh]
+.zshrc
+----
+zplug "isuke/droolscar", as:theme
+----
+
+=== By https://github.com/robbyrussell/oh-my-zsh[oh-my-zsh]
+
+NOTE: TODO
