@@ -74,3 +74,28 @@ zplug "isuke/droolscar", as:theme
 === By https://github.com/robbyrussell/oh-my-zsh[oh-my-zsh]
 
 NOTE: TODO
+
+=== Plain
+
+[source, sh]
+----
+$ git clone git@github.com:isuke/droolscar.git
+$ source droolscar/droolscar.zsh-theme
+----
+
+== Options
+
+[cols="1,1,1", options="header"]
+|===
+| Environment Variable
+| Default Value
+| Description
+
+a| `DROOLSCAR_DATE_FORMAT`
+a| `"+%m/%d %H:%M:%S"`
+| current date time format.
+
+a| `DROOLSCAR_SEGMENT_SEPARATOR`
+a| `''` (U+E0B0)
+| separate character of each segment.
+|===
