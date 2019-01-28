@@ -160,13 +160,17 @@ prompt_git_stash() {
   local stash_size
 
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    stash_size=$(git stash list | wc -l | tr -d ' ')
-    if [[ stash_size -eq 0 ]]; then
-      fg=black
+    if $(git reflog exists refs/stash >/dev/null 2>&1); then
+      stash_size=$(git reflog refs/stash | wc -l | tr -d ' ')
+      if [[ stash_size -eq 0 ]]; then
+        fg=black
+      else
+        fg=red
+      fi
     else
-      fg=red
+      stash_size=0
+      fg=black
     fi
-
     prompt_segment white $fg "❒ stash +$stash_size"
   fi
 }
