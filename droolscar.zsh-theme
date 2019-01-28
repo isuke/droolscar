@@ -1,6 +1,19 @@
 DROOLSCAR_DATE_FORMAT=${DROOLSCAR_DATE_FORMAT:-"+%m/%d %H:%M:%S"}
 DROOLSCAR_SEGMENT_SEPARATOR=${DROOLSCAR_SEGMENT_SEPARATOR:-''}
 
+setopt promptsubst
+
+if $(git --version >/dev/null 2>&1); then
+  autoload -Uz vcs_info
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' get-revision true
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' stagedstr '✚ '
+  zstyle ':vcs_info:*' unstagedstr '● '
+  zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
+  zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
+fi
+
 prompt_segment() {
   local bg fg
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
@@ -88,18 +101,7 @@ prompt_git_duet_name() {
 }
 
 prompt_git_current_branch() {
-  setopt promptsubst
-  autoload -Uz vcs_info
-
-  zstyle ':vcs_info:*' enable git
-  zstyle ':vcs_info:*' get-revision true
-  zstyle ':vcs_info:*' check-for-changes true
-  zstyle ':vcs_info:*' stagedstr '✚ '
-  zstyle ':vcs_info:*' unstagedstr '● '
-  zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
-  zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
   vcs_info
-
   prompt_segment green black $vcs_info_msg_0_
 }
 
