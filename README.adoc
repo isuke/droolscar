@@ -9,7 +9,7 @@ image:https://raw.githubusercontent.com/isuke/droolscar/images/image1.png[]
 
 **Droolscar** is zsh theme.
 
-You need https://github.com/powerline/powerline[Powerline].
+You need to set https://github.com/powerline/powerline[Powerline] font.
 
 == Features
 
