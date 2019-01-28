@@ -66,12 +66,10 @@ prompt_dir() {
 }
 
 prompt_git_name() {
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    if $(git config --get duet.env.git-author-name >/dev/null 2>&1); then
-      prompt_git_duet_name
-    else
-      prompt_git_normal_name
-    fi
+  if $(git config --get duet.env.git-author-name >/dev/null 2>&1); then
+    prompt_git_duet_name
+  else
+    prompt_git_normal_name
   fi
 }
 
@@ -90,30 +88,26 @@ prompt_git_duet_name() {
 }
 
 prompt_git_current_branch() {
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    setopt promptsubst
-    autoload -Uz vcs_info
+  setopt promptsubst
+  autoload -Uz vcs_info
 
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚ '
-    zstyle ':vcs_info:*' unstagedstr '● '
-    zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
-    zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
-    vcs_info
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' get-revision true
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' stagedstr '✚ '
+  zstyle ':vcs_info:*' unstagedstr '● '
+  zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
+  zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
+  vcs_info
 
-    prompt_segment green black $vcs_info_msg_0_
-  fi
+  prompt_segment green black $vcs_info_msg_0_
 }
 
 prompt_git_remotes() {
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    eval "remotes=(`git remote | sed 's/\n/ /'`)"
-    for remote in $remotes; do
-      prompt_git_remote $remote
-    done
-  fi
+  eval "remotes=(`git remote | sed 's/\n/ /'`)"
+  for remote in $remotes; do
+    prompt_git_remote $remote
+  done
 }
 
 prompt_git_remote() {
@@ -126,53 +120,49 @@ prompt_git_remote() {
 
   fg=black
 
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    current_branch=${$(git rev-parse --abbrev-ref HEAD)}
-    remote_path=${$(git rev-parse --verify remotes\/${remote}\/${current_branch} --symbolic-full-name 2> /dev/null)}
+  current_branch=${$(git rev-parse --abbrev-ref HEAD)}
+  remote_path=${$(git rev-parse --verify remotes\/${remote}\/${current_branch} --symbolic-full-name 2> /dev/null)}
 
-    if [[ -n ${remote_path} ]] ; then
-      ahead=$(git rev-list ${remote_path}..HEAD 2> /dev/null | wc -l | tr -d ' ')
-      behind=$(git rev-list HEAD..${remote_path} 2> /dev/null | wc -l | tr -d ' ')
+  if [[ -n ${remote_path} ]] ; then
+    ahead=$(git rev-list ${remote_path}..HEAD 2> /dev/null | wc -l | tr -d ' ')
+    behind=$(git rev-list HEAD..${remote_path} 2> /dev/null | wc -l | tr -d ' ')
 
-      if [[ $ahead -eq 0 && $behind -eq 0 ]] ; then
-        remote_status="○ "
-      else
-        if [[ $ahead -gt 0 ]] ; then
-          fg=yellow
-        fi
-
-        if [[ $behind -gt 0 ]] ; then
-          fg=red
-        fi
-
-        remote_status="+${ahead} -${behind}"
-      fi
+    if [[ $ahead -eq 0 && $behind -eq 0 ]] ; then
+      remote_status="○ "
     else
-      remote_status="--"
-    fi
+      if [[ $ahead -gt 0 ]] ; then
+        fg=yellow
+      fi
 
-    prompt_segment cyan $fg "⏏ $remote $remote_status"
+      if [[ $behind -gt 0 ]] ; then
+        fg=red
+      fi
+
+      remote_status="+${ahead} -${behind}"
+    fi
+  else
+    remote_status="--"
   fi
+
+  prompt_segment cyan $fg "⏏ $remote $remote_status"
 }
 
 prompt_git_stash() {
   local fg
   local stash_size
 
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    if $(git reflog exists refs/stash >/dev/null 2>&1); then
-      stash_size=$(git reflog refs/stash | wc -l | tr -d ' ')
-      if [[ stash_size -eq 0 ]]; then
-        fg=black
-      else
-        fg=red
-      fi
-    else
-      stash_size=0
+  if $(git reflog exists refs/stash >/dev/null 2>&1); then
+    stash_size=$(git reflog refs/stash | wc -l | tr -d ' ')
+    if [[ stash_size -eq 0 ]]; then
       fg=black
+    else
+      fg=red
     fi
-    prompt_segment white $fg "❒ stash +$stash_size"
+  else
+    stash_size=0
+    fg=black
   fi
+  prompt_segment white $fg "❒ stash +$stash_size"
 }
 
 prompt_none() {
@@ -184,10 +174,12 @@ build_prompt() {
   RETVAL=$?
   prompt_name
   prompt_dir
-  prompt_git_name
-  prompt_git_current_branch
-  prompt_git_stash
-  prompt_git_remotes
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+    prompt_git_name
+    prompt_git_current_branch
+    prompt_git_stash
+    prompt_git_remotes
+  fi
   prompt_end
 
   echo
