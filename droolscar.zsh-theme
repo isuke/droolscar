@@ -1,5 +1,11 @@
 DROOLSCAR_DATE_FORMAT=${DROOLSCAR_DATE_FORMAT:-"+%m/%d %H:%M:%S"}
 DROOLSCAR_SEGMENT_SEPARATOR=${DROOLSCAR_SEGMENT_SEPARATOR:-''}
+DROOLSCAR_DIR_ICON=${DROOLSCAR_DIR_ICON:-''}
+DROOLSCAR_GIT_AUTHOR_ICON=${DROOLSCAR_GIT_AUTHOR_ICON:-'󰏪'}
+DROOLSCAR_GIT_BRANCH_ICON=${DROOLSCAR_GIT_BRANCH_ICON:-'󰘬'}
+DROOLSCAR_GIT_STASH_ICON=${DROOLSCAR_GIT_STASH_ICON:-'󰠔'}
+DROOLSCAR_GIT_REMOTE_ICON=${DROOLSCAR_GIT_REMOTE_ICON:-'󰲁'}
+DROOLSCAR_TIME_ICON=${DROOLSCAR_TIME_ICON:-''}
 
 setopt promptsubst
 
@@ -10,8 +16,8 @@ if $(git --version >/dev/null 2>&1); then
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' stagedstr '✚ '
   zstyle ':vcs_info:*' unstagedstr '● '
-  zstyle ':vcs_info:*' formats "%{ %F{black}%}%b %{%F{black}%}%u%c"
-  zstyle ':vcs_info:*' actionformats " %{%F{red}%}%b %{%F{black}%}%u%c"
+  zstyle ':vcs_info:*' formats "%{$DROOLSCAR_GIT_BRANCH_ICON %F{black}%}%b %{%F{black}%}%u%c"
+  zstyle ':vcs_info:*' actionformats "$DROOLSCAR_GIT_BRANCH_ICON %{%F{red}%}%b %{%F{black}%}%u%c"
 fi
 
 prompt_segment() {
@@ -58,7 +64,7 @@ prompt_status_and_time() {
 
   CURRENT_BG=$bg
 
-  prompt_segment $bg $fg "$time $symbols"
+  prompt_segment $bg $fg "$DROOLSCAR_TIME_ICON $time $symbols"
 }
 
 prompt_name() {
@@ -71,11 +77,11 @@ prompt_name() {
   fi
   CURRENT_BG=$bg
 
-  prompt_segment $bg white '%n'
+  prompt_segment $bg white "%n"
 }
 
 prompt_dir() {
-  prompt_segment blue white '%~'
+  prompt_segment blue white "$DROOLSCAR_DIR_ICON %~"
 }
 
 prompt_git_name() {
@@ -89,15 +95,15 @@ prompt_git_name() {
 prompt_git_normal_name() {
   local name=`git config --get user.name`
 
-  prompt_segment yellow black "✏ $name"
+  prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $name"
 }
 
 prompt_git_duet_name() {
   local author_name=`git config --get duet.env.git-author-name`
   local committer_name=`git config --get duet.env.git-committer-name`
 
-  [[ $author_name ]] && prompt_segment yellow black "✏ $author_name"
-  [[ $committer_name ]] && prompt_segment yellow black "✏ $committer_name"
+  [[ $author_name ]] && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $author_name"
+  [[ $committer_name ]] && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $committer_name"
 }
 
 prompt_git_current_branch() {
@@ -146,7 +152,7 @@ prompt_git_remote() {
     remote_status="--"
   fi
 
-  prompt_segment cyan $fg "⏏ $remote $remote_status"
+  prompt_segment cyan $fg "$DROOLSCAR_GIT_REMOTE_ICON $remote $remote_status"
 }
 
 prompt_git_stash() {
@@ -164,7 +170,7 @@ prompt_git_stash() {
     stash_size=0
     fg=black
   fi
-  prompt_segment white $fg "❒ stash +$stash_size"
+  prompt_segment white $fg "$DROOLSCAR_GIT_STASH_ICON stash +$stash_size"
 }
 
 prompt_none() {

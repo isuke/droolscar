@@ -5,6 +5,11 @@
 **Droolscar** is zsh theme.
 
 You need to set [Powerline](https://github.com/powerline/powerline) font.
+The following fonts are recommended for Japanese.
+
+- [白源 (はくげん／HackGen)](https://github.com/yuru7/HackGen)
+- [PlemolJP](https://github.com/yuru7/PlemolJP)
+
 
 ## Features
 
@@ -81,4 +86,13 @@ $ source droolscar/droolscar.zsh-theme
 | Environment Variable          | Default Value       | Description                         |
 | ----------------------------- | ------------------- | ----------------------------------- |
 | `DROOLSCAR_DATE_FORMAT`       | `"+%m/%d %H:%M:%S"` | current date time format.           |
-| `DROOLSCAR_SEGMENT_SEPARATOR` | `''` (U+E0B0)      | separate character of each segment. |
+| `DROOLSCAR_SEGMENT_SEPARATOR` | `""` (U+E0B0)      | separate character of each segment. |
+
+### Recommended Separator Characters
+
+- `""` (U+E0B0)
+- `""` (U+E0C0)
+- `""` (U+E0C8)
+- `""` (U+E0B8)
+- `""` (U+E0BC)
+- `""` (U+E0B4)
