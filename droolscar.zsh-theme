@@ -60,7 +60,7 @@ prompt_status_and_time() {
     fg=white
   fi
 
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{red}%}✱ "
+  symbols+=%(1j.%{%F{red}%}✱ %j .)
 
   CURRENT_BG=$bg
 
@@ -102,8 +102,8 @@ prompt_git_duet_name() {
   local author_name=`git config --get duet.env.git-author-name`
   local committer_name=`git config --get duet.env.git-committer-name`
 
-  [[ $author_name ]] && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $author_name"
-  [[ $committer_name ]] && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $committer_name"
+  test $author_name && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $author_name"
+  test $committer_name && prompt_segment yellow black "$DROOLSCAR_GIT_AUTHOR_ICON $committer_name"
 }
 
 prompt_git_current_branch() {
