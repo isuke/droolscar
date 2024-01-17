@@ -7,6 +7,9 @@ DROOLSCAR_GIT_STASH_ICON=${DROOLSCAR_GIT_STASH_ICON:-'󰠔'}
 DROOLSCAR_GIT_REMOTE_ICON=${DROOLSCAR_GIT_REMOTE_ICON:-'󰲁'}
 DROOLSCAR_TIME_ICON=${DROOLSCAR_TIME_ICON:-''}
 
+DROOLSCAR_APPLE_ICON=""
+DROOLSCAR_LINUX_ICON=""
+
 setopt promptsubst
 
 if $(git --version >/dev/null 2>&1); then
@@ -22,6 +25,7 @@ fi
 
 prompt_segment() {
   local bg fg
+
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
@@ -60,15 +64,21 @@ prompt_status_and_time() {
     fg=white
   fi
 
-  symbols+=%(1j.%{%F{red}%}✱ %j .)
-
   CURRENT_BG=$bg
 
-  prompt_segment $bg $fg "$DROOLSCAR_TIME_ICON $time $symbols"
+  prompt_segment $bg $fg "$DROOLSCAR_TIME_ICON $time"
 }
 
 prompt_name() {
+  local os_icon
   local bg
+
+  case $OSTYPE in
+    darwin*)
+      os_icon=$DROOLSCAR_APPLE_ICON ;;
+    linux*)
+      os_icon=$DROOLSCAR_LINUX_ICON ;;
+  esac
 
   if [[ $UID -eq 0 ]]; then
     bg=red
@@ -77,7 +87,7 @@ prompt_name() {
   fi
   CURRENT_BG=$bg
 
-  prompt_segment $bg white "%n"
+  prompt_segment $bg white "$os_icon %n"
 }
 
 prompt_dir() {
