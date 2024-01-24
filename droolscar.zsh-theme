@@ -1,16 +1,31 @@
 DROOLSCAR_DATE_FORMAT=${DROOLSCAR_DATE_FORMAT:-"+%m/%d %H:%M:%S"}
+
+DROOLSCAR_SHOW_LANGS=${DROOLSCAR_SHOW_LANGS:-true}
+DROOLSCAR_SHOW_ABSOLUTE_PATH=${DROOLSCAR_SHOW_ABSOLUTE_PATH:-true}
+
 DROOLSCAR_SEGMENT_SEPARATOR=${DROOLSCAR_SEGMENT_SEPARATOR:-''}
-DROOLSCAR_DIR_ICON=${DROOLSCAR_DIR_ICON:-''}
+DROOLSCAR_SEGMENT_SEPARATOR_R=${DROOLSCAR_SEGMENT_SEPARATOR_R:-''}
+
+DROOLSCAR_CURRENT_DIR_ICON=${DROOLSCAR_CURRENT_DIR_ICON:-'󰉖'}
+DROOLSCAR_ABSOLUTE_PATH_ICON=${DROOLSCAR_ABSOLUTE_PATH_ICON:-'󰉋'}
 DROOLSCAR_GIT_AUTHOR_ICON=${DROOLSCAR_GIT_AUTHOR_ICON:-'󰏪'}
 DROOLSCAR_GIT_BRANCH_ICON=${DROOLSCAR_GIT_BRANCH_ICON:-'󰘬'}
 DROOLSCAR_GIT_STASH_ICON=${DROOLSCAR_GIT_STASH_ICON:-'󰠔'}
 DROOLSCAR_GIT_REMOTE_ICON=${DROOLSCAR_GIT_REMOTE_ICON:-'󰲁'}
 DROOLSCAR_TIME_ICON=${DROOLSCAR_TIME_ICON:-''}
 
+DROOLSCAR_LANGS=(python ruby node rust go)
+
 DROOLSCAR_APPLE_ICON=""
 DROOLSCAR_LINUX_ICON=""
+DROOLSCAR_PYTHON_ICON=""
+DROOLSCAR_RUBY_ICON=""
+DROOLSCAR_NODE_ICON=""
+DROOLSCAR_RUST_ICON=""
+DROOLSCAR_GO_ICON=""
 
 setopt promptsubst
+setopt transient_rprompt
 
 if $(git --version >/dev/null 2>&1); then
   autoload -Uz vcs_info
@@ -50,11 +65,8 @@ prompt_end() {
 prompt_status_and_time() {
   local bg fg
   local time
-  local symbols
 
   time=`date ${DROOLSCAR_DATE_FORMAT}`
-
-  symbols=()
 
   if [[ $RETVAL -eq 0 ]]; then
     bg=white
@@ -91,7 +103,7 @@ prompt_name() {
 }
 
 prompt_dir() {
-  prompt_segment blue white "$DROOLSCAR_DIR_ICON %~"
+  prompt_segment blue white "$DROOLSCAR_CURRENT_DIR_ICON %1d"
 }
 
 prompt_git_name() {
@@ -184,8 +196,17 @@ prompt_git_stash() {
 }
 
 prompt_none() {
-  CURRENT_BG=white
-  prompt_segment white default ""
+  local bg
+
+  # FIXME
+  if [[ $RETVAL -eq 0 ]]; then
+    bg=white
+  else
+    bg=red
+  fi
+
+  CURRENT_BG=$bg
+  prompt_segment $bg default ""
 }
 
 build_prompt() {
@@ -211,5 +232,63 @@ build_prompt2() {
   prompt_end
 }
 
-PROMPT='$(build_prompt)'
-PROMPT2='$(build_prompt2)'
+rprompt_langs() {
+  if $(mise --version >/dev/null 2>&1); then
+    local segment
+    local langs
+
+    langs=()
+
+    for lang in $DROOLSCAR_LANGS; do
+      local version=`mise ls --current --no-header $lang 2> /dev/null | awk '{print $2}'`
+      local icon=""
+
+      if [[ -n $version ]]; then
+        case $lang in
+          python)
+            icon=$DROOLSCAR_PYTHON_ICON ;;
+          ruby)
+            icon=$DROOLSCAR_RUBY_ICON ;;
+          node)
+            icon=$DROOLSCAR_NODE_ICON ;;
+          rust)
+            icon=$DROOLSCAR_RUST_ICON ;;
+          go)
+            icon=$DROOLSCAR_GO_ICON ;;
+        esac
+
+        langs+="[$icon $version]"
+      fi
+    done
+
+    # HACK: implement rprompt_segment
+    CURRENT_BG_R=magenta
+    segment="%F{magenta}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
+    echo -n "${segment}%K{magenta}%F{white} $langs %f%k"
+  fi
+}
+
+rprompt_dir_path() {
+  # HACK: implement rprompt_segment
+  local segment
+  if [[ -n $CURRENT_BG_R ]]; then
+    segment="%K{$CURRENT_BG_R}%F{blue}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
+  else
+    segment="%F{blue}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
+  fi
+
+  echo -n "${segment}%K{blue}%F{white} $DROOLSCAR_ABSOLUTE_PATH_ICON %20>...>%~%<< %f%k"
+}
+
+build_rprompot() {
+  test $DROOLSCAR_SHOW_LANGS         = true && rprompt_langs
+  test $DROOLSCAR_SHOW_ABSOLUTE_PATH = true && rprompt_dir_path
+}
+
+prompt_precmd() {
+  PROMPT='$(build_prompt)'
+  PROMPT2='$(build_prompt2)'
+  RPROMPT='$(build_rprompot)'
+}
+
+add-zsh-hook precmd prompt_precmd

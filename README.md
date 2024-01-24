@@ -4,24 +4,24 @@
 
 **Droolscar** is zsh theme.
 
-You need to set [Powerline](https://github.com/powerline/powerline) font.
+You need [Nerd Fonts](https://www.nerdfonts.com/).
+
 The following fonts are recommended for Japanese.
 
 - [白源 (はくげん／HackGen)](https://github.com/yuru7/HackGen)
 - [PlemolJP](https://github.com/yuru7/PlemolJP)
 
-
 ## Features
 
 ![](https://raw.githubusercontent.com/isuke/droolscar/images/features.png)
 
-### user id
+### user id and os
 
-Show user id.
+Show user id and os icon (Linux or Mac).
 
-### dir path
+### current directory
 
-Show current directory path.
+Show current directory name.
 
 ### git authors
 
@@ -59,40 +59,54 @@ Show current time.
 
 If prev command's exit code is not 0, background color is changed to red.
 
-If exist background job, show `✱` mark.
-
 ## Usage
+
+### By [zinit](https://github.com/zdharma-continuum/zinit)
+
+```sh
+$ echo 'zinit light "isuke/droolscar"' >> ~/.zshrc
+```
 
 ### By [zplug](https://github.com/zplug/zplug)
 
-.zshrc
 ```sh
-zplug "isuke/droolscar", as:theme
+$ echo 'zplug "isuke/droolscar", as:theme' >> ~/.zshrc
 ```
-
-### By [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-
-TODO
 
 ### Plain
 
 ```sh
 $ git clone git@github.com:isuke/droolscar.git
-$ source droolscar/droolscar.zsh-theme
+$ echo 'source /your/path/droolscar/droolscar.zsh-theme' >> ~/.zshrc
 ```
 
 ## Options
 
-| Environment Variable          | Default Value       | Description                         |
-| ----------------------------- | ------------------- | ----------------------------------- |
-| `DROOLSCAR_DATE_FORMAT`       | `"+%m/%d %H:%M:%S"` | current date time format.           |
-| `DROOLSCAR_SEGMENT_SEPARATOR` | `""` (U+E0B0)      | separate character of each segment. |
+| Environment Variable            | Default Value       | Description                                      |
+| ------------------------------- | ------------------- | ------------------------------------------------ |
+| `DROOLSCAR_DATE_FORMAT`         | `"+%m/%d %H:%M:%S"` | current date time format.                        |
+| `DROOLSCAR_SHOW_LANGS`          | `true`              | show programming lang versions by mise on right. |
+| `DROOLSCAR_SHOW_ABSOLUTE_PATH`  | `true`              | show current absolute path on right.             |
+| `DROOLSCAR_SEGMENT_SEPARATOR`   | `""` (U+E0B0)      | separate character of each segment for left.     |
+| `DROOLSCAR_SEGMENT_SEPARATOR_R` | `""` (U+E0B2)      | separate character of each segment for right.    |
 
 ### Recommended Separator Characters
 
-- `""` (U+E0B0)
-- `""` (U+E0C0)
-- `""` (U+E0C8)
-- `""` (U+E0B8)
-- `""` (U+E0BC)
-- `""` (U+E0B4)
+- hard_divider (default)
+    - left: `""` (U+E0B0)
+    - right: `""` (U+E0B2)
+- triangle1
+    - left: `""` (U+E0B8)
+    - right: `""` (U+E0BE)
+- triangle2
+    - left: `""` (U+E0BC)
+    - right: `""` (U+E0BA)
+- half_circle_thick
+    - left: `""` (U+E0B4)
+    - right: `""` (U+E0B6)
+- flame_thick
+    - left: `""` (U+E0C0)
+    - right: `""` (U+E0C2)
+- ice_waveform
+    - left: `""` (U+E0C8)
+    - right: `""` (U+E0CA)
