@@ -269,15 +269,19 @@ rprompt_langs() {
 }
 
 rprompt_dir_path() {
-  # HACK: implement rprompt_segment
+  local max_length
   local segment
+
+  # HACK: implement rprompt_segment
   if [[ -n $CURRENT_BG_R ]]; then
     segment="%K{$CURRENT_BG_R}%F{blue}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
   else
     segment="%F{blue}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
   fi
 
-  echo -n "${segment}%K{blue}%F{white} $DROOLSCAR_ABSOLUTE_PATH_ICON %20>...>%~%<< %f%k"
+  max_length=`echo $(( COLUMNS * 0.1 )) | awk '{printf("%d\n", $1)}'`
+
+  echo -n "${segment}%K{blue}%F{white} $DROOLSCAR_ABSOLUTE_PATH_ICON %$max_length>...>%~%<< %f%k"
 }
 
 build_rprompot() {
