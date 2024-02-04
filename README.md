@@ -86,7 +86,7 @@ $ echo 'source /your/path/droolscar/droolscar.zsh-theme' >> ~/.zshrc
 | ------------------------------- | ------------------- | ------------------------------------------------ |
 | `DROOLSCAR_DATE_FORMAT`         | `"+%m/%d %H:%M:%S"` | current date time format.                        |
 | `DROOLSCAR_LANGS`               | `()`                | which programming lang versions by [mise](https://mise.jdx.dev/) on right. ex) `(ruby node go)` |
-| `DROOLSCAR_SHOW_ABSOLUTE_PATH`  | `true`              | show current absolute path on right.             |
+| `DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH` | `$(( COLUMNS * 0.2 ))}` | show current absolute path max length on right. don't show if set 0 |
 | `DROOLSCAR_SEGMENT_SEPARATOR`   | `""` (U+E0B0)      | separate character of each segment for left.     |
 | `DROOLSCAR_SEGMENT_SEPARATOR_R` | `""` (U+E0B2)      | separate character of each segment for right.    |
 

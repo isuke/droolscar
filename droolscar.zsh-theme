@@ -1,7 +1,7 @@
 DROOLSCAR_DATE_FORMAT=${DROOLSCAR_DATE_FORMAT:-"+%m/%d %H:%M:%S"}
 
 DROOLSCAR_LANGS=${DROOLSCAR_LANGS:-()}
-DROOLSCAR_SHOW_ABSOLUTE_PATH=${DROOLSCAR_SHOW_ABSOLUTE_PATH:-true}
+DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH=${DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH:-$(( COLUMNS * 0.2 ))}
 
 DROOLSCAR_SEGMENT_SEPARATOR=${DROOLSCAR_SEGMENT_SEPARATOR:-''}
 DROOLSCAR_SEGMENT_SEPARATOR_R=${DROOLSCAR_SEGMENT_SEPARATOR_R:-''}
@@ -277,14 +277,14 @@ rprompt_dir_path() {
     segment="%F{blue}$DROOLSCAR_SEGMENT_SEPARATOR_R%f"
   fi
 
-  max_length=`echo $(( COLUMNS * 0.1 )) | awk '{printf("%d\n", $1)}'`
-
-  echo -n "${segment}%K{blue}%F{white} $DROOLSCAR_ABSOLUTE_PATH_ICON %$max_length>...>%~%<< %f%k"
+  echo -n "${segment}%K{blue}%F{white} $DROOLSCAR_ABSOLUTE_PATH_ICON %$DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH_INT>...>%~%<< %f%k"
 }
 
 build_rprompot() {
-  test ${#DROOLSCAR_LANGS[*]} -gt 0         && rprompt_langs
-  test $DROOLSCAR_SHOW_ABSOLUTE_PATH = true && rprompt_dir_path
+  DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH_INT=`echo $DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH | awk '{printf("%d\n", $1)}'`
+
+  test ${#DROOLSCAR_LANGS[*]}                  -gt 0 && rprompt_langs
+  test $DROOLSCAR_ABSOLUTE_PATH_MAX_LENGTH_INT -gt 0 && rprompt_dir_path
 }
 
 prompt_precmd() {
