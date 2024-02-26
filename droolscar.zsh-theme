@@ -27,9 +27,7 @@ setopt transient_rprompt
 
 if $(git --version >/dev/null 2>&1); then
   autoload -Uz vcs_info
-  zstyle ':vcs_info:*' enable git
-  zstyle ':vcs_info:*' get-revision true
-  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:git:*' check-for-changes true
   zstyle ':vcs_info:*' stagedstr '✚ '
   zstyle ':vcs_info:*' unstagedstr '● '
   zstyle ':vcs_info:*' formats "%{$DROOLSCAR_GIT_BRANCH_ICON %F{black}%}%b %{%F{black}%}%u%c"
